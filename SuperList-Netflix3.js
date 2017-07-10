@@ -20,6 +20,8 @@
  */
 
 // TODO: Remove. Used just for intellisense
+
+function require(){};
 var $ = require('jquery');
 
 alert('hello!');
