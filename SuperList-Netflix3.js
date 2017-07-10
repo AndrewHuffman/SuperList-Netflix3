@@ -21,12 +21,16 @@
 
 // TODO: Remove. Used just for intellisense
 
-function require(){};
-var $ = require('jquery');
+// function require(){
+//     return $;
+// }
+//var $ = require('jquery');
 
-alert('hello!');
 // Add css
-GM_addStyle('#secretMenu {overflow-y:auto;height:300px;background-color: black}');
+// GM_addStyle('.SuperBrowseContainer {overflow-y:auto;height:300px;background-color: black; display: none}');
+GM_addStyle('.SuperListContainer {overflow-y:auto;height:300px;background-color: black; display: inline-block;}');
+GM_addStyle('#SuperListLink .SuperListContainer {visibility: hidden}');
+GM_addStyle('#SuperListLink:hover .SuperListContainer {visibility: visible}');
 
 /* eslint-disable no-console */
 function _log (lvl, ...args) {
@@ -258,41 +262,66 @@ var categories = {
 
 setTimeout(() => {
     if ($) {
-        alert('started and found $')
+        alert('started and found $');
         start();
     } else {
         _log('debug', 'waiting for jQuery.');
     }
 }, 1000);
 
-function createListView() {
-    let container = $('<div></div>');
-    let list = $('<ul></ul>');
-    let item = $('<li></li>');
-    item.text('Test');
-    list.append(item);
-    container.append(list);
+function createSubMenuItem(name, href) {
+    return $('<li class="sub-menu-item"><a class="sub-menu-link" href="' + href + '">' + name + '</a></li>');
+}
 
-    return container;
+function createSubMenuList(items) {
+    let subMenu = $('<ul class="sub-menu-list multi-column"></ul>');
+    Object.keys(items).forEach((key) => {
+        subMenu.append(createSubMenuItem(key, items[key]))
+    });
+    return subMenu;
+}
+
+function createListView() {
+    let menu        = $('<div class="sub-menu theme-lakira genreNav hasSpecialItems" style="opacity: 1; transition-duration: 150ms;"><div class="topbar"></div></div>');
+    let items = [];
+    items.push({'goog 1':'http://google.com'})
+    items.push({'goog 2':'http://google.com'})
+    items.push({'goog 3':'http://google.com'})
+    items.push({'goog 4':'http://google.com'})
+    items.push({'goog 5':'http://google.com'})
+    items.push({'goog 6':'http://google.com'})
+    items.push({'goog 7':'http://google.com'})
+    debugger;
+    menu.append(createSubMenuList(items));
+    menu.append(createSubMenuList(items));
+
+    menu.append(createSubMenuList(items));
+    menu.append(createSubMenuList(items));
+    menu.append(createSubMenuList(items));
+    menu.append(createSubMenuList(items));
+    menu.append(createSubMenuList(items));
+    menu.append(createSubMenuList(items));
+    menu.append(createSubMenuList(items));
+    menu.append(createSubMenuList(items));
+    return menu;
 }
 
 function updateNavList() {
     /*jshint multistr: true */
-    const navLink =
-        $('<li class="active hasSubMenu browse" id="superBrowse" style="list-style-type:none;"> \
-            <span style="color:#E50914; font-weight:700; font-size:16px;">Super Browse</span> \
-            <span class="caret"></span> \
-        </li>');
+    const navLinkItem = $('<li id="#superlist" class="browse hasSubMenu active"></li>');
+    const navLink     = $('<a role="button" aria-haspopup="true" tabindex="0" >Super Browse</a>');
+    const caret       = $('<span class="caret" role="presentation" data-reactid="10"></span>');
+    navLinkItem.append(navLink);
+    navLinkItem.append(caret);
     // prepend "Super Browse" link to sub menu
     let navList = $('ul[role="navigation"]');
-    navList.prepend(navLink);
+    navList.prepend(navLinkItem);
 
     return navLink;
 }
 
 // Once jQuery is available, let's get this ball rolling!
 function start() {
-    document.body.childNodes.prepend('<p>Sanity Check</p>');
     let container = createListView();
     let navLink   = updateNavList();
     navLink.append(container);
