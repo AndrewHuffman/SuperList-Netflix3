@@ -6,8 +6,8 @@
 // @grant       GM_addStyle
 // @match       *://*.netflix.com/*
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
-// @downloadURL https://gist.githubusercontent.com/AndrewHuffman/c9aecc10732e9b55820c1b797bf11736/raw/SuperList-Netflix.js
-// @updateURL   https://gist.githubusercontent.com/AndrewHuffman/c9aecc10732e9b55820c1b797bf11736/raw/SuperList-Netflix.js
+// @downloadURL https://raw.githubusercontent.com/AndrewHuffman/SuperList-Netflix3/master/SuperList-Netflix3.js
+// @updateURL   https://raw.githubusercontent.com/AndrewHuffman/SuperList-Netflix3/master/SuperList-Netflix3.js
 // ==/UserScript==
 
 /**
@@ -290,6 +290,7 @@ function updateNavList() {
 
 // Once jQuery is available, let's get this ball rolling!
 function start() {
+    document.body.childNodes.prepend('<p>Sanity Check</p>');
     let container = createListView();
     let navLink   = updateNavList();
     navLink.append(container);
